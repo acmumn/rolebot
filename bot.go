@@ -11,8 +11,8 @@ type Bot struct {
 	dg *discordgo.Session
 }
 
-func newBot(config Config) (bot *Bot) {
-	dg, err := discordgo.New("Bot " + config.Token)
+func newBot(token string) (bot *Bot) {
+	dg, err := discordgo.New("Bot " + token)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -93,7 +93,7 @@ func (bot *Bot) getRole(s *discordgo.Session, m *discordgo.MessageCreate, rolena
 	return nil
 }
 
-func (bot*Bot) removeRole(s*discordgo.Session, m*discordgo.MessageCreate, rolename string) (err error) {
+func (bot *Bot) removeRole(s *discordgo.Session, m *discordgo.MessageCreate, rolename string) (err error) {
 	channel, err := s.Channel(m.ChannelID)
 	if err != nil {
 		return err
