@@ -56,9 +56,9 @@ func (bot *Bot) handleMessage(s *discordgo.Session, m *discordgo.MessageCreate) 
 			bot.removeRole(s, m, parts[2])
 		case "list":
 			bot.listRoles(s, m)
+		case "source":
+			s.ChannelMessageSend(m.ChannelID, "https://github.com/acmumn/rolebot")
 		}
-	} else if strings.HasPrefix(m.Content, "!source") {
-		s.ChannelMessageSend(m.ChannelID, "https://github.com/acmumn/rolebot")
 	}
 }
 
