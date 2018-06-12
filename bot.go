@@ -54,7 +54,11 @@ func (bot *Bot) handleMessage(s *discordgo.Session, m *discordgo.MessageCreate) 
 				return
 			}
 			bot.removeRole(s, m, parts[2])
+		case "list":
+			bot.listRoles(s, m)
 		}
+	} else if strings.HasPrefix(m.Content, "!source") {
+		s.ChannelMessageSend(m.ChannelID, "https://github.com/acmumn/rolebot")
 	}
 }
 
@@ -126,4 +130,23 @@ func (bot *Bot) removeRole(s *discordgo.Session, m *discordgo.MessageCreate, rol
 		return err
 	}
 	return nil
+}
+
+func (bot *Bot) listRoles(s *discordgo.Session, m *discordgo.MessageCreate) (err error) {
+	channel, err := s.Channel(m.ChannelID)
+	if err != nil {
+		return err
+	}
+	roles, err := s.GuildRoles(channel.GuildID)
+	if err != nil {
+		return err
+	}
+	list := make([]string, 0)
+	for _, role := range roles {
+		if !strings.HasPrefix(role.Name, "self/") {
+			continue
+		}
+		list = append(list, "`"+role.Name+"`")
+	}
+	s.ChannelMessageSend(m.ChannelID, strings.Join(list, ", "))
 }
