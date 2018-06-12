@@ -149,4 +149,5 @@ func (bot *Bot) listRoles(s *discordgo.Session, m *discordgo.MessageCreate) (err
 		list = append(list, "`"+role.Name+"`")
 	}
 	s.ChannelMessageSend(m.ChannelID, strings.Join(list, ", "))
+	return nil
 }
