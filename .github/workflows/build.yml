@@ -13,9 +13,8 @@ jobs:
       - uses: actions/checkout@master
       - name: osu build
         uses: cedrickring/golang-action/go1.11@1.5.2
-        with:
-          args: build
       - uses: actions/create-release@latest
+        id: create_release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
@@ -23,3 +22,11 @@ jobs:
           release_name: Release ${{ github.ref }}
           draft: false
           prerelease: false
+      - uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: rolebot
+          asset_name: rolebot
+          asset_content_type: application/octet-stream
