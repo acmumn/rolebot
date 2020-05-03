@@ -7,6 +7,12 @@ import (
 	"github.com/bwmarrin/discordgo"
 )
 
+const (
+	PREFIX         = "self/"
+	EMOJI_THUMBSUP = "\xf0\x9f\x91\x8d"
+	EMOJI_NO       = "\xf0\x9f\x9a\xab"
+)
+
 type Bot struct {
 	dg *discordgo.Session
 }
@@ -73,10 +79,10 @@ func (bot *Bot) getRole(s *discordgo.Session, m *discordgo.MessageCreate, rolena
 	}
 	found := false
 	for _, role := range roles {
-		if !strings.HasPrefix(role.Name, "self/") {
+		if !strings.HasPrefix(role.Name, PREFIX) {
 			continue
 		}
-		if ("self/" + rolename) == role.Name {
+		if (PREFIX+rolename) == role.Name || rolename == role.Name {
 			err = s.GuildMemberRoleAdd(channel.GuildID, m.Author.ID, role.ID)
 			if err != nil {
 				break
@@ -86,9 +92,9 @@ func (bot *Bot) getRole(s *discordgo.Session, m *discordgo.MessageCreate, rolena
 	}
 	var emoji string
 	if found {
-		emoji = "\xf0\x9f\x91\x8d"
+		emoji = EMOJI_THUMBSUP
 	} else {
-		emoji = "\xf0\x9f\x9a\xab"
+		emoji = EMOJI_NO
 	}
 	err = s.MessageReactionAdd(m.ChannelID, m.ID, emoji)
 	if err != nil {
@@ -108,10 +114,10 @@ func (bot *Bot) removeRole(s *discordgo.Session, m *discordgo.MessageCreate, rol
 	}
 	found := false
 	for _, role := range roles {
-		if !strings.HasPrefix(role.Name, "self/") {
+		if !strings.HasPrefix(role.Name, PREFIX) {
 			continue
 		}
-		if ("self/" + rolename) == role.Name {
+		if (PREFIX+rolename) == role.Name || rolename == role.Name {
 			err = s.GuildMemberRoleRemove(channel.GuildID, m.Author.ID, role.ID)
 			if err != nil {
 				break
@@ -121,9 +127,9 @@ func (bot *Bot) removeRole(s *discordgo.Session, m *discordgo.MessageCreate, rol
 	}
 	var emoji string
 	if found {
-		emoji = "\xf0\x9f\x91\x8d"
+		emoji = EMOJI_THUMBSUP
 	} else {
-		emoji = "\xf0\x9f\x9a\xab"
+		emoji = EMOJI_NO
 	}
 	err = s.MessageReactionAdd(m.ChannelID, m.ID, emoji)
 	if err != nil {
@@ -143,7 +149,7 @@ func (bot *Bot) listRoles(s *discordgo.Session, m *discordgo.MessageCreate) (err
 	}
 	list := make([]string, 0)
 	for _, role := range roles {
-		if !strings.HasPrefix(role.Name, "self/") {
+		if !strings.HasPrefix(role.Name, PREFIX) {
 			continue
 		}
 		list = append(list, "`"+role.Name+"`")

@@ -1,0 +1,25 @@
+on:
+  push:
+    tags:
+      - "v*"
+
+name: build
+
+jobs:
+  build:
+    name: build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@master
+      - name: osu build
+        uses: cedrickring/golang-action/go1.11@1.5.2
+        with:
+          args: build
+      - uses: actions/create-release@latest
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ github.ref }}
+          release_name: Release ${{ github.ref }}
+          draft: false
+          prerelease: false
