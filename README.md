@@ -29,6 +29,15 @@ me: !role remove hello
 bot: [thumbs up emoji]
 ```
 
+Building from source
+--------------------
+
+Run `go build` or download it from [here](https://github.com/iptq/rolebot/releases/latest).
+
+Pass your bot token in the `BOT_TOKEN` environment variable.
+
+Run the binary.
+
 Contact
 -------
 
