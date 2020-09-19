@@ -42,21 +42,21 @@ func (bot *Bot) Close() {
 
 func (bot *Bot) handleMessage(s *discordgo.Session, m *discordgo.MessageCreate) {
 	log.Println(m.Author.Username, m.Content)
-	if strings.HasPrefix(m.Content, "!role") {
-		parts := strings.Split(m.Content, " ")
-		log.Println(parts)
 
-		if len(parts) < 1 {
-			return
-		}
+	parts := strings.Split(m.Content, " ")
+	if len(parts) < 1 {
+		return
+	}
+
+	if parts[0] == "!role" {
 		switch parts[1] {
 		case "get":
-			if len(parts) < 2 {
+			if len(parts) < 3 {
 				return
 			}
 			bot.getRole(s, m, parts[2])
 		case "remove":
-			if len(parts) < 2 {
+			if len(parts) < 3 {
 				return
 			}
 			bot.removeRole(s, m, parts[2])
@@ -84,6 +84,7 @@ func (bot *Bot) getRole(s *discordgo.Session, m *discordgo.MessageCreate, rolena
 		}
 		if (PREFIX+rolename) == role.Name || rolename == role.Name {
 			err = s.GuildMemberRoleAdd(channel.GuildID, m.Author.ID, role.ID)
+			log.Println(err)
 			if err != nil {
 				break
 			}
