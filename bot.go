@@ -41,6 +41,12 @@ func (bot *Bot) Close() {
 }
 
 func (bot *Bot) handleMessage(s *discordgo.Session, m *discordgo.MessageCreate) {
+	defer func() {
+		if err := recover(); err != nil {
+			log.Println("Caught a panic in handleMessage:", err)
+		}
+	}()
+
 	log.Println(m.Author.Username, m.Content)
 
 	parts := strings.Split(m.Content, " ")
