@@ -1,0 +1,8 @@
+[Unit]
+Description=rolebot
+
+[Service]
+ExecStart=/home/misc-svc/rolebot/rolebot
+
+[Install]
+WantedBy=multi-user.target
