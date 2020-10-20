@@ -44,7 +44,7 @@ func (bot *Bot) handleMessage(s *discordgo.Session, m *discordgo.MessageCreate) 
 	log.Println(m.Author.Username, m.Content)
 
 	parts := strings.Split(m.Content, " ")
-	if len(parts) < 1 {
+	if len(parts) < 2 {
 		return
 	}
 
