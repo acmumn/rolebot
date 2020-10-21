@@ -3,6 +3,7 @@ Description=rolebot
 
 [Service]
 ExecStart=/home/misc-svc/rolebot/rolebot
+Restart=always
 
 [Install]
 WantedBy=multi-user.target
